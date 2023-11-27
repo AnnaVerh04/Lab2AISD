@@ -1,4 +1,12 @@
 #include <iostream>
+#include <random>
+
+inline int random(int x, int y) {
+	std::random_device rd;
+	std::mt19937 gen(rd());
+	std::uniform_int_distribution<int> dist(x, y);
+	return dist(gen);
+}
 
 
 template <typename T>
@@ -17,9 +25,28 @@ private:
 	Node* tail;
 	int size;
 
+	void clear() {
+		while (head != nullptr) {
+			pop_head();
+		}
+	}
 
 public:
 	LinkedList(): head(nullptr), tail(nullptr), size(0) {}
+
+	LinkedList(int count, int x, int y) {
+		if (x > y) {
+			return; //error
+		}
+		int generated_num = random(x, y);
+		int i = 0;
+		while (i < count)
+		{
+			push_tail(generated_num);
+			generated_num = random(x, y);
+			++i;
+		}
+	}
 
 	void push_tail(const T& value) {
 		Node* new_node = new Node(value);
@@ -208,7 +235,25 @@ public:
 		}
 
 		return current->data;
-	}
+	 }
 
+	 void print() const {
+		 if (head == nullptr) {
+			 return;  //error
+		 }
+
+		 Node* current = head;
+		 int i = 0;
+		 while (i < size) {
+			 std::cout << current->data << " ";
+			 current = current->next;
+			 ++i;
+		 }
+		 std::cout << "\n";
+	 }
+
+	 ~LinkedList() {
+		 clear();
+	 }
 
 };
