@@ -48,5 +48,30 @@ public:
 		}
 	}
 
+	void push_head(const T& value) {
+		Node* new_node = new Node(value);
+		++size;
+		if (head == nullptr) {
+			head = tail = new_node;
+			head->next = head;
+		}
+		else {
+			new_node->next = head;
+			head = new_node;
+			tail->next = head;
+		}
+	}
+
+	void push_head(const LinkedList<T>& other) {
+		if (other.head != nullptr) {
+			LinkedList<T> temp_list;
+			temp_list = *this;
+			clear();                                        //
+			*this = other;
+			push_tail(temp_list);
+		}
+	}
+
+
 
 };
