@@ -8,6 +8,7 @@ inline int random(int x, int y) {
 	return dist(gen);
 }
 
+struct list_exception {};
 
 template <typename T>
 class LinkedList {
@@ -34,9 +35,23 @@ private:
 public:
 	LinkedList(): head(nullptr), tail(nullptr), size(0) {}
 
+	LinkedList(const LinkedList<T>& other) {
+		if (other.head != nullptr) {
+			Node* current_other = other.head;
+			int i = 0;
+			while (i < other.size) {
+				push_tail(current_other->data);
+				current_other = current_other->next;
+				++i;
+			}
+
+			size = other.size;
+		}
+	}
+
 	LinkedList(int count, int x, int y) {
 		if (x > y) {
-			return; //error
+			throw list_exception(); 
 		}
 		int generated_num = random(x, y);
 		int i = 0;
@@ -93,7 +108,7 @@ public:
 		if (other.head != nullptr) {
 			LinkedList<T> temp_list;
 			temp_list = *this;
-			clear();                                        //
+			clear();                                        
 			*this = other;
 			push_tail(temp_list);
 		}
@@ -101,7 +116,7 @@ public:
 
 	LinkedList& operator=(const LinkedList<T>& other) {
 		if (this != &other) {
-			clear();  //
+			clear();  
 			
 			if (other.head != nullptr) {
 				Node* current_other = other.head;
@@ -120,7 +135,7 @@ public:
 	void pop_head() {
 		if (head == nullptr)
 		{
-			return;  //ошибка
+			throw list_exception();
 		}
 		--size;
 
@@ -141,7 +156,7 @@ public:
 	void pop_tail() {
 		if (head == nullptr)
 		{
-			return; //ошибка
+			throw list_exception();
 		}
 		--size;
 
@@ -169,7 +184,7 @@ public:
 	void delete_node(const T& value) {
 		if (head == nullptr)
 		{
-			return; //ошибка
+			throw list_exception();
  		}
 
 		Node* current = head;
@@ -210,7 +225,7 @@ public:
 	const T& operator[](int index) const {
 		if (index > size - 1)
 		{
-			return; // ошибка
+			throw list_exception();
 		}
 
 		Node* current = head;
@@ -225,7 +240,7 @@ public:
 	 T& operator[](int index)  {
 		if (index > size - 1)
 		{
-			return; // ошибка
+			throw list_exception();
 		}
 
 		Node* current = head;
@@ -239,7 +254,7 @@ public:
 
 	 void print() const {
 		 if (head == nullptr) {
-			 return;  //error
+			 throw list_exception();
 		 }
 
 		 Node* current = head;
